@@ -21,5 +21,5 @@ public abstract class Sprite {
     }
 
 
-    public abstract void update();
+    public abstract void update(double deltaTime);
 }
