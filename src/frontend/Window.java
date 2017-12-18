@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 public class Window extends Application {
 
-    private static final State DEFAULT_STATE = State.FLURRIES;
+    private static final State DEFAULT_STATE = State.BLIZZARD;
 
     private long prevTime;
     private Stage primaryStage;

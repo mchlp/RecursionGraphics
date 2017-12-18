@@ -14,6 +14,7 @@ public class Ground extends Sprite {
 
     private static final double INITAL_HEIGHT = 100;
     private static final double MOUND_HEIGHT_UPDATE_TIME = 0.05;
+    private static final double MAX_MOUND_HEIGHT_PERCENT_OF_SCREEN = 0.5;
 
     private Planet mPlanet;
     private Color mColor;
@@ -32,7 +33,7 @@ public class Ground extends Sprite {
     private void drawGround() {
         GraphicsContext gc = mPlanet.getmCanvas().getGraphicsContext2D();
         gc.setFill(Color.LIGHTGREY);
-        gc.fillOval(-(mWidth*(1.5-1))/2, mGroundLevel - mHeight/2, mWidth*1.5, mHeight);
+        gc.fillOval(-(mWidth*(1.5-1))/2, mGroundLevel - mHeight, mWidth*1.5, mHeight*2);
     }
 
     @Override
@@ -43,8 +44,10 @@ public class Ground extends Sprite {
 
         mLastUpdate += deltaTime;
         if (mLastUpdate > MOUND_HEIGHT_UPDATE_TIME) {
-            mHeight++;
-            mLastUpdate = 0;
+            if (mHeight <= mPlanet.getmDimensions().getHeight()*MAX_MOUND_HEIGHT_PERCENT_OF_SCREEN) {
+                mHeight += mPlanet.getmState().getMoundGrowRate();
+                mLastUpdate = 0;
+            }
         }
         drawGround();
     }

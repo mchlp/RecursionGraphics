@@ -38,7 +38,7 @@ public class SnowflakePoint extends Sprite {
     public void update(double deltaTime) {
         mLastUpdate += deltaTime;
         if (mLastUpdate > GRAVITY_UPDATE_TIME) {
-            int multi = mSpeed > mPlanet.getmState().getMaxWindSpeed() ? -1 : mSpeed < mPlanet.getmState().getMinSnowflakeSpeed() ? 1 : Math.random() > 0.5 ? 1 : -1;
+            int multi = mSpeed > mPlanet.getmState().getMaxSnowflakeSpeed() ? -1 : mSpeed < mPlanet.getmState().getMinSnowflakeSpeed() ? 1 : Math.random() > 0.5 ? 1 : -1;
             mSpeed += multi * Math.random()*mPlanet.getmState().getSnowflakeSpeedChangeMulti();
             mLastUpdate = 0;
         }
@@ -47,7 +47,6 @@ public class SnowflakePoint extends Sprite {
         mStartPoint.move(mVelocity);
         mStartPoint.setX((mStartPoint.getX()+1)%1);
         mStartPoint.setY((mStartPoint.getY()+1)%1);
-        System.out.println(mSpeed);
         drawSnowflake(mPlanet.getmCanvas().getWidth()*mStartPoint.getX(), mPlanet.getmCanvas().getHeight()*mStartPoint.getY());
     }
 }
