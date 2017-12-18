@@ -1,10 +1,10 @@
-package backend;
 /*
  * Michael Pu
- * SpaceshipGame - backend.Acceleration
- * ICS3U1 - Mr. Radulovic
- * November 27, 2017
+ * RecursionGraphics - Acceleration
+ * December 14, 2017
  */
+
+package backend;
 
 
 public class Acceleration {

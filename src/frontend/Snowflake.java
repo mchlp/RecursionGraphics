@@ -1,13 +1,19 @@
+/*
+ * Michael Pu
+ * RecursionGraphics - Snowflake
+ * December 17, 2017
+ */
+
 package frontend;
 
 import backend.*;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 public class Snowflake extends Sprite {
 
     private static final double GRAVITY_UPDATE_TIME = 0.5;
 
-    private GraphicsContext mGc;
     private Planet mPlanet;
     private int mLevels;
     private double mLen;
@@ -15,9 +21,8 @@ public class Snowflake extends Sprite {
     private int mAngle;
     private double mLastUpdate;
 
-    public Snowflake(Planet planet, GraphicsContext gc, Coordinate startPoint, int levels, int len) {
+    public Snowflake(Planet planet, Coordinate startPoint, int levels, int len) {
         super();
-        mGc = gc;
         mPlanet = planet;
         mStartPoint = startPoint;
         mLevels = levels;
@@ -31,12 +36,16 @@ public class Snowflake extends Sprite {
         if (level == 0) {
             return;
         }
+        GraphicsContext gc = mPlanet.getmCanvas().getGraphicsContext2D();
         int add = 60;
         int angle = mAngle;
         while (angle <= (mAngle+360-add)) {
             double xOffset = Math.cos(Math.toRadians(angle)) * len;
             double yOffset = Math.sin(Math.toRadians(angle)) * len;
-            mGc.strokeLine(x, y, x+xOffset, y+yOffset);
+
+            gc.setStroke(Color.WHITE);
+            gc.setLineWidth(1);
+            gc.strokeLine(x, y, x+xOffset, y+yOffset);
             drawSnowflake(x+xOffset, y+yOffset, len/3, level-1);
             angle += add;
         }

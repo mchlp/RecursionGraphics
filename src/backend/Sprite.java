@@ -1,3 +1,9 @@
+/*
+ * Michael Pu
+ * RecursionGraphics - Sprite
+ * December 15, 2017
+ */
+
 package backend;
 
 import javafx.geometry.Point2D;

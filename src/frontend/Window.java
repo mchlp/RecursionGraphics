@@ -1,3 +1,9 @@
+/*
+ * Michael Pu
+ * RecursionGraphics - Window
+ * December 17, 2017
+ */
+
 package frontend;
 
 import backend.Coordinate;
@@ -5,27 +11,31 @@ import backend.Sprite;
 import backend.Velocity;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
 public class Window extends Application {
 
-    private final static int NUM_SNOWFLAKES = 20;
+    private static final State DEFAULT_STATE = State.FLURRIES;
 
     private long prevTime;
+    private Stage primaryStage;
     private Pane root;
     private Canvas canvas;
     private ArrayList<Sprite> spriteList;
     private GraphicsContext gc;
 
-    private Coordinate dimensions;
     private Planet planet;
 
     public static void main(String[] args) {
@@ -35,32 +45,52 @@ public class Window extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        dimensions = new Coordinate(1000, 900);
+        this.primaryStage = primaryStage;
+
+        Rectangle2D screen = Screen.getPrimary().getVisualBounds();
 
         spriteList = new ArrayList<>();
         Sprite.setSpriteList(spriteList);
 
         root = new Pane();
-        root.setPrefSize(dimensions.getX(), dimensions.getY());
+        root.setPrefSize(screen.getWidth(), screen.getHeight());
         Scene scene = new Scene(root);
 
-        canvas = new Canvas(dimensions.getX(), dimensions.getY());
+        canvas = new Canvas(screen.getWidth(), screen.getHeight());
         root.getChildren().add(canvas);
 
-        planet = new Planet(new Velocity(0, 0), canvas);
+        planet = new Planet(canvas, DEFAULT_STATE);
 
         gc = canvas.getGraphicsContext2D();
 
+        new Sky(planet);
+        new Ground(planet, Color.LIGHTGREY);
+
+        int numSnowflake = (int) (screen.getWidth()*screen.getHeight()*DEFAULT_STATE.getSnowflakePerPixel());
+
+        // point snowflakes
+        for (int i=0; i<numSnowflake; i++) {
+            double xPos = (Math.random());
+            double yPos = (Math.random());
+            double size = Math.random()*3+5;
+            new SnowflakePoint(planet, new Coordinate(xPos, yPos), size);
+        }
+
+
+        // large snowflakes
+        /*
         for (int i = 0; i < NUM_SNOWFLAKES; i++) {
             double xPos = (Math.random() * dimensions.getX());
             double yPos = (Math.random() * dimensions.getY());
             int level = 3;
-            int len = (int) (Math.random()*10 + 20);
-            new Snowflake(planet, gc, new Coordinate(xPos, yPos), level, len);
-        }
+            int len = (int) (Math.random()*10 + 10);
+            new Snowflake(planet, new Coordinate(xPos, yPos), level, len);
+        }*/
+
 
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Recursion Drawing");
+        primaryStage.setTitle("Snowing...");
+        primaryStage.setMaximized(true);
         primaryStage.show();
 
         prevTime = System.nanoTime();
@@ -72,18 +102,30 @@ public class Window extends Application {
             }
         };
         timer.start();
+
+        primaryStage.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                updateDimensions();
+            }
+        });
+
+        primaryStage.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                updateDimensions();
+            }
+        });
+    }
+
+    private void updateDimensions() {
+        Rectangle2D screen = new Rectangle2D(primaryStage.getX(), primaryStage.getY(), primaryStage.getWidth(), primaryStage.getHeight());
+        planet.setDimesions(screen);
+        canvas.setWidth(screen.getWidth());
+        canvas.setHeight(screen.getHeight());
     }
 
     private void onUpdate(double deltaTime) {
-
-        gc.setFill(Color.rgb(46, 14, 73));
-        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
-        gc.setFill(Color.LIGHTGREY);
-        gc.fillOval(-(dimensions.getX()*(1.5-1))/2, dimensions.getY() - 50/2 - 50, dimensions.getX()*1.5, 100);
-
-        gc.setStroke(Color.WHITE);
-        gc.setLineWidth(1);
 
         planet.update(deltaTime);
 
