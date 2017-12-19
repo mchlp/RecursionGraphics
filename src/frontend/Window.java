@@ -20,6 +20,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -27,7 +29,7 @@ import java.util.ArrayList;
 
 public class Window extends Application {
 
-    private static final State DEFAULT_STATE = State.BLIZZARD;
+    private static final State DEFAULT_STATE = State.NORMAL;
 
     private long prevTime;
     private Stage primaryStage;
@@ -61,10 +63,14 @@ public class Window extends Application {
 
         planet = new Planet(canvas, DEFAULT_STATE);
 
-        gc = canvas.getGraphicsContext2D();
+        Sky sky = new Sky(planet);
+        Ground ground = new Ground(planet, Color.LIGHTGREY);
 
-        new Sky(planet);
-        new Ground(planet, Color.LIGHTGREY);
+        Text text = new Text();
+        root.getChildren().add(text);
+        Clock clock = new Clock(sky, text);
+
+        gc = canvas.getGraphicsContext2D();
 
         int numSnowflake = (int) (screen.getWidth()*screen.getHeight()*DEFAULT_STATE.getSnowflakePerPixel());
 
