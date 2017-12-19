@@ -14,7 +14,7 @@ import java.util.Calendar;
 
 public class Sky extends Sprite {
 
-    private static final double MINUTE_TO_SECOND_RATIO = 60;
+    private static final double MINUTE_TO_SECOND_RATIO = 50;
     private static final Color DEFAULT_COLOUR = Color.rgb(14, 4, 21);
     private static final Color DAYTIME_COLOUR = Color.rgb(135, 206, 235);
     private static final Color DUSK_DAWN_COLOUR = Color.rgb(255, 102, 0);
@@ -36,7 +36,7 @@ public class Sky extends Sprite {
         mHeight = mPlanet.getmDimensions().getHeight();
         mWidth = mPlanet.getmDimensions().getWidth();
 
-        mTime.add(Calendar.MINUTE, (int) (MINUTE_TO_SECOND_RATIO * deltaTime));
+        mTime.add(Calendar.SECOND, (int) (MINUTE_TO_SECOND_RATIO * deltaTime * 60));
 
         double timeInHours = mTime.get(Calendar.HOUR_OF_DAY) + mTime.get(Calendar.MINUTE) / 60.0 + mTime.get(Calendar.SECOND) / (60.0 * 60.0);
 
@@ -56,7 +56,7 @@ public class Sky extends Sprite {
             } else {
                 startTime = 17.5;
             }
-            double duskDawnOpacity = 0.3*Math.pow((1.5-(Math.abs(startTime - timeInHours))) / 1.5, 1);
+            double duskDawnOpacity = 0.5*Math.pow((1.5-(Math.abs(startTime - timeInHours))) / 1.5, 1);
             Color curDuskDawnColour = new Color(DUSK_DAWN_COLOUR.getRed(), DUSK_DAWN_COLOUR.getGreen(), DUSK_DAWN_COLOUR.getBlue(), duskDawnOpacity);
             gc.setFill(curDuskDawnColour);
             gc.fillRect(0, 0, mWidth, mHeight);
