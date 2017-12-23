@@ -1,7 +1,7 @@
 /*
  * Michael Pu
  * RecursionGraphics - Sky
- * December 17, 2017
+ * December 22, 2017
  */
 
 package frontend;
@@ -18,6 +18,9 @@ public class Sky extends Sprite {
     private static final Color DEFAULT_COLOUR = Color.rgb(14, 4, 21);
     private static final Color DAYTIME_COLOUR = Color.rgb(135, 206, 235);
     private static final Color DUSK_DAWN_COLOUR = Color.rgb(255, 102, 0);
+
+    private static final Color SUN_COLOUR = Color.YELLOW;
+    private static final Color MOON_COLOUR = Color.GREY;
 
     private Planet mPlanet;
     private Color mColour;
@@ -44,11 +47,13 @@ public class Sky extends Sprite {
         gc.setFill(DEFAULT_COLOUR);
         gc.fillRect(0, 0, mWidth, mHeight);
 
+        // the brightness of the sky
         double daytimeOpacity = Math.pow((12-Math.abs(12 - timeInHours)) / 12.0, 2.2);
         Color curDaytimeColour = new Color(DAYTIME_COLOUR.getRed(), DAYTIME_COLOUR.getGreen(), DAYTIME_COLOUR.getBlue(), daytimeOpacity);
         gc.setFill(curDaytimeColour);
         gc.fillRect(0, 0, mWidth, mHeight);
 
+        // dusk dawn colour
         if (timeInHours > 5.5 && timeInHours < 8.5 || timeInHours > 16 && timeInHours < 19) {
             double startTime;
             if (timeInHours < 8.5) {
@@ -60,6 +65,20 @@ public class Sky extends Sprite {
             Color curDuskDawnColour = new Color(DUSK_DAWN_COLOUR.getRed(), DUSK_DAWN_COLOUR.getGreen(), DUSK_DAWN_COLOUR.getBlue(), duskDawnOpacity);
             gc.setFill(curDuskDawnColour);
             gc.fillRect(0, 0, mWidth, mHeight);
+        }
+
+        // the sun
+        if (timeInHours > 6 && timeInHours < 11) {
+            double pos = (10-timeInHours)/5;
+            gc.setFill(SUN_COLOUR);
+            gc.fillOval(mPlanet.getmDimensions().getWidth()/2 - 50, pos*(mPlanet.getmDimensions().getHeight()+200), 100, 100);
+        }
+
+        // the moon
+        if (timeInHours > 20 && timeInHours < 24) {
+            double pos = (24-timeInHours)/5;
+            gc.setFill(MOON_COLOUR);
+            gc.fillOval(mPlanet.getmDimensions().getWidth()/2 - 50, pos*(mPlanet.getmDimensions().getHeight()+200), 100, 100);
         }
     }
 

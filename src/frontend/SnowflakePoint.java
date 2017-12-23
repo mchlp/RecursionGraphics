@@ -1,7 +1,7 @@
 /*
  * Michael Pu
  * RecursionGraphics - SnowflakePoint
- * December 17, 2017
+ * December 22, 2017
  */
 
 package frontend;

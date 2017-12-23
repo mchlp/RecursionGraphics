@@ -1,7 +1,7 @@
 /*
  * Michael Pu
  * RecursionGraphics - Clock
- * December 18, 2017
+ * December 22, 2017
  */
 
 package frontend;
